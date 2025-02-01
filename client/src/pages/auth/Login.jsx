@@ -1,10 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AuthLeft from '../../components/common/AuthLeft'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { loginUser } from '../../store/authSlice'
+import toast from 'react-hot-toast'
 
+
+const initialState = {
+  email: '',
+  password: ''
+}
 const Login = () => {
+  const[formData, setFormData] = useState(initialState); 
+  const dispatch = useDispatch();
+  const navigate =  useNavigate();
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    const { id, value } = event.target;
+    setFormData({ ...formData, [id]: value });
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
+    dispatch(loginUser(formData)).then((data) => {
+      if(data?.payload?.success){
+        toast.success(data?.payload?.message);
+        navigate("/");
+      }
+      else{
+        toast.error(data?.payload?.message);
+      }
+    })
   }
   return (
     <div className='flex h-screen flex-col sm:flex-row'>
@@ -33,6 +59,8 @@ const Login = () => {
               type="email"
               id="email"
               placeholder="Enter email"
+              value={formData.email}
+              onChange={handleChange}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -44,6 +72,8 @@ const Login = () => {
               type="password"
               id="password"
               placeholder="Enter password"
+              value={formData.password}
+              onChange={handleChange}
               className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>

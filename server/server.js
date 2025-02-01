@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from 'dotenv';
 import AuthRoute from "./routes/Auth.routes.js"
+import PostRoute from "./routes/Post.routes.js"
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", AuthRoute);
+app.use("/api/post", PostRoute);
 
 app.listen(PORT, () => {
     databaseConnect();
