@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from "axios"
 
 const initialState = {
-    isLoading: true
+    isLoading: true,
+    postList: []
 }
 
 export const createPost = createAsyncThunk(
@@ -20,10 +21,34 @@ export const createPost = createAsyncThunk(
     }
 )
 
+export const fetchAllPost = createAsyncThunk(
+    "/post/get",
+    async() => {
+        const response = await axios.get(
+            "http://localhost:5000/api/post/get"
+        )
+        return response.data;
+    }
+)
+
 export const PostSlice = createSlice({
     name: 'post',
     initialState,
     reducers: {
+    },
+    extraReducers: (builder) => {
+        builder
+        .addCase(fetchAllPost.pending, (state) =>{
+            state.isLoading = true;
+        })
+        .addCase(fetchAllPost.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.postList = action.payload.data;
+        })
+        .addCase(fetchAllPost.rejected, (state) => {
+            state.isLoading = false;
+            state.postList = []
+        })
     }
 })
 

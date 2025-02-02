@@ -68,7 +68,7 @@ export const editPost = async(req,res) => {
         findPost.description =  description || findPost.description;
         findPost.phone = phone || findPost.phone;
         findPost.priority = priority || findPost.priority;
-        findPost.file = file || findPost.priority;
+        findPost.file = file || findPost.file;
 
         await findPost.save();
         res.status(200).json({

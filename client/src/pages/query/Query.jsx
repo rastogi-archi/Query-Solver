@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from '../../components/HomeLayout/Navbar';
+import Navbar from '../../components/homeLayout/Navbar';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { createPost } from '../../store/postSlice';
@@ -46,7 +46,7 @@ const Query = () => {
   return (
     <div className="font-sans min-h-screen flex flex-col overflow-hidden">
       <Navbar />
-      <div className="flex-1 w-full max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-2">
+      <div className="flex-1 w-full max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-16">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-3">Post Your Query Here</h1>
         <form onSubmit={handleSubmit}>
           {/* Query Input */}
@@ -115,7 +115,7 @@ const Query = () => {
           {/* File Attachment */}
           <div className="mb-6">
             <label htmlFor="file" className="block text-lg font-semibold text-gray-700 mb-2">
-              Attach a file (optional)
+              Attach a file
             </label>
             <div className="relative">
               <input

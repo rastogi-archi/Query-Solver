@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from 'dotenv';
 import AuthRoute from "./routes/Auth.routes.js"
 import PostRoute from "./routes/Post.routes.js"
+import UserRoute from "./routes/User.routes.js"
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", AuthRoute);
 app.use("/api/post", PostRoute);
+app.use("/api/user", UserRoute);
 
 app.listen(PORT, () => {
     databaseConnect();
