@@ -39,9 +39,9 @@ function App() {
             <Query />
           }
         />
-        <Route to="/profile" element={<Profile/>}/>
 
         {/* Public Routes */}
+        <Route path="/profile" element={<Profile/>}/>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<UnAuth />} />

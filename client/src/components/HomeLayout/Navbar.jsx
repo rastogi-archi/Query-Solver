@@ -41,7 +41,7 @@ const Navbar = () => {
 
       {/* User Info & Logout Button */}
       <div className="flex items-center gap-4">
-        <Link to="/ profile">
+        <Link to="/profile">
           <img src="user.png" alt="User" className="h-10 w-10 rounded-full object-cover border-2 border-gray-300 cursor-pointer" />
         </Link>
 
