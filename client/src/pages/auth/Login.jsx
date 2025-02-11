@@ -20,18 +20,20 @@ const Login = () => {
     const { id, value } = event.target;
     setFormData({ ...formData, [id]: value });
   }
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(loginUser(formData)).then((data) => {
-      if(data?.payload?.success){
-        toast.success(data?.payload?.message);
+    try {
+      const data = await dispatch(loginUser(formData)).unwrap(); // Use `unwrap` for cleaner promise handling
+      if (data?.success) {
+        toast.success(data?.message);
         navigate("/");
+      } else {
+        toast.error(data?.message);
       }
-      else{
-        toast.error(data?.payload?.message);
-      }
-    })
-  }
+    } catch (error) {
+      toast.error("Login failed. Please try again.");
+    }
+  };
   return (
     <div className='flex h-screen flex-col sm:flex-row'>
       <div className='w-1/2 bg-gray-100'>
