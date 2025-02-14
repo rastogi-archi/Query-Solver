@@ -9,38 +9,52 @@ const initialState = {
   description: '',
   phone: '',
   priority: '',
-  file: null
 };
 
 const Query = () => {
   const [formData, setFormData] = useState(initialState);
+  const [file, setFile] = useState(null); 
   const dispatch = useDispatch();
 
   // Handle form input changes
   const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
+    const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: type === 'file' ? files[0] : value
+      [name]: value
     }));
   };
 
-  const handleSubmit = (e) => {
+  // Handle file change separately
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const action = dispatch(createPost(formData));
+      const data = new FormData();
+      data.append('query', formData.query);
+      data.append('description', formData.description);
+      data.append('phone', formData.phone);
+      data.append('priority', formData.priority);
+      if (file) data.append('file', file);
+
+      const action = await dispatch(createPost(data)); // Await async action
       const { payload } = action;
 
       if (payload?.message) {
         toast.success(payload.message);
+        setFormData(initialState);
+        setFile(null);
       } else {
-        toast.error('Something went wrong. Please try again.');
+        toast.error('Something went wrong. Please try again');
       }
     } catch (error) {
+      console.error(error);
       toast.error('Failed to submit query.');
     }
-    setFormData(initialState);
   };
 
   return (
@@ -48,7 +62,7 @@ const Query = () => {
       <Navbar />
       <div className="flex-1 w-full max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-16">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-3">Post Your Query Here</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           {/* Query Input */}
           <div className="mb-5">
             <label htmlFor="query" className="block text-lg font-semibold text-gray-700 mb-1">Query</label>
@@ -117,19 +131,13 @@ const Query = () => {
             <label htmlFor="file" className="block text-lg font-semibold text-gray-700 mb-2">
               Attach a file
             </label>
-            <div className="relative">
-              <input
-                id="file"
-                name="file"
-                type="file"
-                value={formData.file ? formData.file.name : ""}
-                onChange={handleChange}
-                className="absolute inset-0 w-full opacity-0 cursor-pointer"
-              />
-              <div className="flex justify-center items-center p-4 border-2 border-gray-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1c3d83] transition duration-200 hover:border-[#1c3d83]">
-                <span className="text-gray-500">Choose a file</span>
-              </div>
-            </div>
+            <input
+              id="file"
+              name="file"
+              type="file"
+              onChange={handleFileChange}
+              className="w-full p-2 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1c3d83] transition duration-200"
+            />
           </div>
 
           {/* Submit Button */}

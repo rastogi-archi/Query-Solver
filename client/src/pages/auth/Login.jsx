@@ -22,8 +22,8 @@ const Login = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const data = await dispatch(loginUser(formData)).unwrap(); // Use `unwrap` for cleaner promise handling
     try {
-      const data = await dispatch(loginUser(formData)).unwrap(); // Use `unwrap` for cleaner promise handling
       if (data?.success) {
         toast.success(data?.message);
         navigate("/");
@@ -31,7 +31,7 @@ const Login = () => {
         toast.error(data?.message);
       }
     } catch (error) {
-      toast.error("Login failed. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
   return (

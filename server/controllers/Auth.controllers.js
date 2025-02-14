@@ -15,7 +15,7 @@ export const registerUser = async (req, res) => {
         if (password.length < 6) {
             return res.status(400).json({
                 success: false,
-                message: "Password length should be greater than 6"
+                message: "Password should be greater than 6"
             })
         }
         const hashPassword = await bcrypt.hash(password, 12);
@@ -62,7 +62,7 @@ export const loginUser = async (req, res) => {
             username: checkUser.username
         },
             process.env.CLIENT_SECRET,
-            { expiresIn: "20m" }
+            { expiresIn: "10m" }
         )
 
         res.cookie("token", token, {

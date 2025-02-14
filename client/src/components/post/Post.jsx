@@ -19,16 +19,19 @@ const Post = () => {
                 </div>
             ) : postList && postList.length > 0 ? (
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                    {postList.map((postItem) => (
-                        <Card
-                            key={postItem.id} // Ensure key prop is added
-                            query={postItem.query}
-                            description={postItem.description}
-                            image={postItem.image}
-                            user={postItem.user}
-                            date={postItem.date}
-                        />
-                    ))}
+                    {postList.map((postItem, index) => 
+                        postItem ? ( 
+                            <Card
+                                key={postItem._id} 
+                                query={postItem.query } 
+                                description={postItem.description}
+                                file={postItem.file}
+                                user={postItem.user}
+                                date={postItem.date}
+                                id={postItem._id}
+                            />
+                        ) : null
+                    )}
                 </div>
             ) : (
                 <div className="flex justify-center items-center h-full">

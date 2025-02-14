@@ -1,15 +1,27 @@
 import React from 'react';
-import { Heart, MessageSquare } from 'lucide-react';
+import { Heart, MessageSquare, X } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { deletePost } from '../../store/postSlice';
 
-const Card = ({ query, description, image, user, date }) => {
+const Card = ({id, query, description, file, user, date }) => {
+  const dispatch = useDispatch();
+  const handleOnDelete = () => {
+    console.log(id);
+    dispatch(deletePost(id));
+  }
+
+  // console.log(file)
   return (
     <div className="max-w-sm bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
       {/* Image Section */}
-      <img
-        className="w-full h-48 object-cover"
-        src={image || ""}
-        alt={query}
-      />
+      <div className='flex items-start'>
+        <img
+          className="w-full h-48 object-cover"
+          src={file || ""}
+          alt={query}
+        />
+        <button className='p-2 cursor-pointer' onClick={handleOnDelete}><X className='size-4' /></button>
+      </div>
 
       {/* Post Content */}
       <div className="p-5">

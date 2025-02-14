@@ -8,8 +8,15 @@ import Chat from "./pages/chat/Chat";
 import Query from "./pages/query/Query";
 import UnAuth from "./pages/unAuth/unAuth";
 import Profile from "./pages/Profile/Profile";
+import CheckAuth from "./components/common/CheckAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 function App() {
+
+  const { user, isAuthenticated, isLoading } = useSelector(state => state.auth);
+
+  // const dispatch = useDispatch();
 
   return (
     <>
@@ -18,30 +25,42 @@ function App() {
         <Route
           path="/"
           element={
-            <Home />
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <Home />
+            </CheckAuth>
           }
         />
         <Route
           path="/connections"
           element={
-            <Connections />
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <Connections />
+            </CheckAuth>
           }
         />
         <Route
           path="/chat"
           element={
-            <Chat />
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <Chat />
+            </CheckAuth>
           }
         />
         <Route
           path="/query"
           element={
-            <Query />
+            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+              <Query />
+            </CheckAuth>
           }
         />
 
         {/* Public Routes */}
-        <Route path="/profile" element={<Profile/>}/>
+        <Route path="/profile" element={
+          <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+            <Profile />
+          </CheckAuth>
+        } />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<UnAuth />} />

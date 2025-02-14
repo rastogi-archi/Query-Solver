@@ -10,31 +10,39 @@ const initialState = {
 export const registerUser = createAsyncThunk(
     "/auth/register",
     async (FormData) => {
-        const response = await axios.post(
-            "http://localhost:5000/api/auth/register",
-            FormData,
-            {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json'
+        try {
+            const response = await axios.post(
+                "http://localhost:5000/api/auth/register",
+                FormData,
+                {
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 }
-            }
-        )
-        return response.data;
+            )
+            return response.data;
+        } catch (error) {
+            return (error.response?.data || { message: "Something went wrong" });
+        }   
     }
 )
 
 export const loginUser = createAsyncThunk(
     "/auth/login",
     async (FormData) => {
-        const response = await axios.post(
-            "http://localhost:5000/api/auth/login",
-            FormData,
-            {
-                withCredentials: true
-            }
-        )
-        return response.data;
+        try {
+            const response = await axios.post(
+                "http://localhost:5000/api/auth/login",
+                FormData,
+                {
+                    withCredentials: true
+                }
+            )
+            return response.data;
+        } catch (error) {
+            return (error.response?.data || { message: "Something went wrong" });
+        }
     }
 )
 
