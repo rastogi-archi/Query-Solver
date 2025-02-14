@@ -19,7 +19,7 @@ const Post = () => {
                 </div>
             ) : postList && postList.length > 0 ? (
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                    {postList.map((postItem, index) => 
+                    {postList.map((postItem) => 
                         postItem ? ( 
                             <Card
                                 key={postItem._id} 

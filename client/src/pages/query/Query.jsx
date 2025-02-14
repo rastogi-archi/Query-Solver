@@ -32,30 +32,23 @@ const Query = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
-      const data = new FormData();
-      data.append('query', formData.query);
-      data.append('description', formData.description);
-      data.append('phone', formData.phone);
-      data.append('priority', formData.priority);
-      if (file) data.append('file', file);
-
-      const action = await dispatch(createPost(data)); // Await async action
-      const { payload } = action;
-
-      if (payload?.message) {
-        toast.success(payload.message);
+      const response = await dispatch(createPost(data));
+      if (response?.payload?.success) {
+        console.log(file)
+        toast.success("Query posted successfully!");
         setFormData(initialState);
         setFile(null);
       } else {
-        toast.error('Something went wrong. Please try again');
+        toast.error(response?.payload?.message || "Failed to submit query.");
       }
     } catch (error) {
       console.error(error);
-      toast.error('Failed to submit query.');
+      toast.error("An error occurred while submitting.");
     }
   };
+  
 
   return (
     <div className="font-sans min-h-screen flex flex-col overflow-hidden">

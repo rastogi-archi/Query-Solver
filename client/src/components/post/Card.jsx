@@ -2,12 +2,18 @@ import React from 'react';
 import { Heart, MessageSquare, X } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { deletePost } from '../../store/postSlice';
+import toast from "react-hot-toast"
 
 const Card = ({id, query, description, file, user, date }) => {
   const dispatch = useDispatch();
   const handleOnDelete = () => {
     console.log(id);
     dispatch(deletePost(id));
+    if (response?.payload?.success) {
+      toast.success("Post deleted successfully");
+    } else {
+      toast.error("Failed to delete post");
+    }
   }
 
   // console.log(file)

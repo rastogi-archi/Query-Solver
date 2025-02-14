@@ -1,61 +1,64 @@
-import React, { useState } from "react";
-import Navbar from '../../components/homeLayout/Navbar';
+import React, { useEffect, useState } from "react";
+import Navbar from "../../components/homeLayout/Navbar";
 import NoUserSelected from "./NoUserSelected";
-
-const users = ["Alice", "Bob", "Charlie", "David"]; // Static list of users
+import { useDispatch, useSelector } from "react-redux";
+import { getAllUsers } from "../../store/userSlice";
 
 const Chat = () => {
+  const dispatch = useDispatch();
+  const { userList, isLoading } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
+
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState({});
   const [input, setInput] = useState("");
 
   const handleUserSelect = (user) => {
     setSelectedUser(user);
-    if (!messages[user]) {
-      setMessages((prev) => ({ ...prev, [user]: [] }));
-    }
+    setMessages((prev) => ({
+      ...prev,
+      [user._id]: prev[user._id] || [],
+    }));
   };
 
   const sendMessage = () => {
     if (input.trim() === "" || !selectedUser) return;
+
     setMessages((prev) => ({
       ...prev,
-      [selectedUser]: [...prev[selectedUser], { sender: "user", text: input }],
+      [selectedUser._id]: [...prev[selectedUser._id], { sender: "user", text: input }],
     }));
     setInput("");
-
-    setTimeout(() => {
-      setMessages((prev) => ({
-        ...prev,
-        [selectedUser]: [
-          ...prev[selectedUser],
-          { sender: "bot", text: "Thanks for your message!" },
-        ],
-      }));
-    }, 1000);
   };
 
   return (
     <div className="flex h-screen bg-gray-50">
-      <Navbar/>
+      <Navbar />
       {/* User List */}
       <div className="w-1/4 bg-gray-900 text-white mt-16 p-6">
         <h2 className="text-2xl font-bold mb-4">Users</h2>
-        <ul className="space-y-2">
-          {users.map((user) => (
-            <li
-              key={user}
-              onClick={() => handleUserSelect(user)}
-              className={`p-3 cursor-pointer rounded-lg transition-colors duration-200 ${
-                selectedUser === user
-                  ? "bg-[#1C3D83]"
-                  : "bg-gray-800 hover:bg-gray-700"
-              }`}
-            >   
-              {user}
-            </li>
-          ))}
-        </ul>
+        {isLoading ? (
+          <p>Loading users...</p>
+        ) : (
+          <ul className="space-y-2">
+            {userList.map((user) => (
+              <li
+                key={user._id}
+                onClick={() => handleUserSelect(user)}
+                className={`p-3 cursor-pointer rounded-lg transition-colors duration-200 ${
+                  selectedUser?._id === user._id
+                    ? "bg-[#1C3D83]"
+                    : "bg-gray-800 hover:bg-gray-700"
+                }`}
+              >
+                {user.name}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Chat Box */}
@@ -63,11 +66,11 @@ const Chat = () => {
         <div className="flex-grow p-6 overflow-y-auto">
           {selectedUser ? (
             <>
-              <h2 className="text-2xl font-semibold mb-6 text-gray-800 ">
-                {selectedUser}
+              <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+                {selectedUser.name}
               </h2>
               <div className="space-y-4">
-                {messages[selectedUser]?.map((msg, index) => (
+                {messages[selectedUser._id]?.map((msg, index) => (
                   <div
                     key={index}
                     className={`flex ${
@@ -88,7 +91,7 @@ const Chat = () => {
               </div>
             </>
           ) : (
-            <NoUserSelected/>
+            <NoUserSelected />
           )}
         </div>
 

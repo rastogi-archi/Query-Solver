@@ -31,7 +31,7 @@ const Connections = () => {
           <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {userList.map((user) => (
               <ConnectionCard
-                key={user.id} // Assuming 'id' is a unique key for each user
+                key={user._id} // Assuming 'id' is a unique key for each user
                 name={user.name}
                 username={user.username}
                 avatarUrl={user.avatarUrl}
