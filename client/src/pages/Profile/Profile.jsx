@@ -1,15 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Camera, ChevronLeft } from "lucide-react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { editUserProfile, getUserProfile } from "../../store/userSlice";
 
 const Profile = () => {
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [username, setUsername] = useState("johndoe123");
-  const [phone, setPhone] = useState("+1 234 567 8900");
-  const [bio, setBio] = useState("A passionate developer.");
-  const [profilePicture, setProfilePicture] = useState(null);
+  const dispatch = useDispatch();
+
+  // Get user data from Redux store
+  const { user } = useSelector((state) => state.user || {});
+
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
+  const [bio, setBio] = useState("");
+  const [profilePicture, setProfilePicture] = useState("user.png");
+
+  // Fetch user profile data from backend when the component mounts
+  useEffect(() => {
+    if (user?._id) {
+      dispatch(getUserProfile(user._id.toString())); 
+    }
+  }, [dispatch, user?._id]);
+
+  // Set the initial state with the fetched data when the user data is available
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email || "");
+      setUsername(user.username || "");
+      setPhone(user.phone || "");
+      setBio(user.bio || "");
+      setProfilePicture(user.profilePicture || "user.png");
+    }
+  }, [user]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -19,17 +43,27 @@ const Profile = () => {
   };
 
   const handleSave = () => {
-    if (!name || !email || !username || !phone) {
-      toast.error("Please fill out all required fields.");
-      return;
-    }
+    const updatedData = {
+      id : user._id.toString(),
+      email,
+      username,
+      phone,
+      bio,
+      profilePicture,
+    };
+    // Save logic here, usually sending updated data to the backend
     toast.success("Profile updated successfully!");
+    dispatch(editUserProfile(updatedData))
+    .then(() => toast.success("Profile updated successfully!"))
+    .catch(() => toast.error("Failed to update profile"))
   };
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-2xl mt-4">
       <Link to="/">
-        <button className="bg-[#1c3d83] p-2 text-white rounded-2xl w-20 mb-4 flex items-center cursor-pointer"><ChevronLeft className="size-4" />Back</button>
+        <button className="bg-[#1c3d83] p-2 text-white rounded-2xl w-20 mb-4 flex items-center cursor-pointer">
+          <ChevronLeft className="size-4" />Back
+        </button>
       </Link>
       <h1 className="text-3xl font-extrabold mb-6 text-gray-800">Manage Your Profile</h1>
 
@@ -63,7 +97,7 @@ const Profile = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="mt-2 p-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="johndoe123"
+              placeholder={user?.username || "Enter your username"}
             />
           </div>
 
@@ -74,7 +108,7 @@ const Profile = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="mt-2 p-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="john.doe@example.com"
+              placeholder={user?.email || "Enter your email"}
             />
           </div>
 
@@ -85,7 +119,7 @@ const Profile = () => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="mt-2 p-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder="+1 234 567 8900"
+              placeholder={user?.phone || "Enter your phone number"}
             />
           </div>
         </div>
@@ -96,7 +130,7 @@ const Profile = () => {
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             className="mt-2 p-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            placeholder="A little about yourself..."
+            placeholder={user?.bio || "Tell us a little about yourself..."}
             rows={4}
           />
         </div>

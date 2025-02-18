@@ -7,6 +7,7 @@ import { getAllUsers } from "../../store/userSlice";
 const Chat = () => {
   const dispatch = useDispatch();
   const { userList, isLoading } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(getAllUsers());
@@ -34,6 +35,8 @@ const Chat = () => {
     setInput("");
   };
 
+  const filteredUsers = userList.filter((u) => u._id !== user?._id);
+
   return (
     <div className="flex h-screen bg-gray-50">
       <Navbar />
@@ -44,17 +47,14 @@ const Chat = () => {
           <p>Loading users...</p>
         ) : (
           <ul className="space-y-2">
-            {userList.map((user) => (
+            {filteredUsers.map((u) => (
               <li
-                key={user._id}
-                onClick={() => handleUserSelect(user)}
-                className={`p-3 cursor-pointer rounded-lg transition-colors duration-200 ${
-                  selectedUser?._id === user._id
-                    ? "bg-[#1C3D83]"
-                    : "bg-gray-800 hover:bg-gray-700"
-                }`}
+                key={u._id}
+                onClick={() => handleUserSelect(u)}
+                className={`p-3 cursor-pointer rounded-lg transition-colors duration-200 ${selectedUser?._id === u._id ? "bg-[#1C3D83]" : "bg-gray-800 hover:bg-gray-700"
+                  }`}
               >
-                {user.name}
+                {u.username}
               </li>
             ))}
           </ul>
@@ -65,31 +65,32 @@ const Chat = () => {
       <div className="flex flex-col w-3/4 bg-white mt-14">
         <div className="flex-grow p-6 overflow-y-auto">
           {selectedUser ? (
-            <>
-              <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-                {selectedUser.name}
-              </h2>
+            <div className="border-b-2">
+              <div className="flex items-center gap-2">
+                <img src="user.png" alt="user" className="h-10 w-10 border-2 rounded-full" />
+                <h2 className="text-2xl font-semibold mb-6 mt-3 text-gray-800">
+                  {selectedUser.username}
+                </h2>
+              </div>
               <div className="space-y-4">
                 {messages[selectedUser._id]?.map((msg, index) => (
                   <div
                     key={index}
-                    className={`flex ${
-                      msg.sender === "user" ? "justify-end" : "justify-start"
-                    }`}
+                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"
+                      }`}
                   >
                     <div
-                      className={`px-4 py-2 max-w-xs rounded-lg text-sm ${
-                        msg.sender === "user"
-                          ? "bg-blue-500 text-white"
-                          : "bg-gray-200 text-gray-800"
-                      }`}
+                      className={`px-4 py-2 max-w-xs rounded-lg text-sm ${msg.sender === "user"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-800"
+                        }`}
                     >
                       {msg.text}
                     </div>
                   </div>
                 ))}
               </div>
-            </>
+            </div>
           ) : (
             <NoUserSelected />
           )}

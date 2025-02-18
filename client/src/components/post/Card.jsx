@@ -19,8 +19,6 @@ const Card = ({ id, query, description, file, user, date }) => {
         toast.error("Post not deleted");
       }
     } catch (error) {
-      // Handle any potential errors
-      console.error("Error deleting post:", error);
       toast.error("An error occurred while deleting the post");
     }
   };

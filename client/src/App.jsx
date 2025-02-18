@@ -11,12 +11,20 @@ import Profile from "./pages/Profile/Profile";
 import CheckAuth from "./components/common/CheckAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { checkAuth } from "./store/authSlice";
 
 function App() {
 
   const { user, isAuthenticated, isLoading } = useSelector(state => state.auth);
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth())
+  }, [dispatch]);
+
+
+  console.log(isLoading, user);
 
   return (
     <>

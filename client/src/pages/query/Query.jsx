@@ -3,6 +3,7 @@
   import { useDispatch } from 'react-redux';
   import toast from 'react-hot-toast';
   import { createPost } from '../../store/postSlice';
+import { useNavigate } from 'react-router-dom';
 
   const initialState = {
     query: '',
@@ -16,6 +17,7 @@
     const [formData, setFormData] = useState(initialState);
     const [file, setFile] = useState(null);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // Handle form input changes
     const handleChange = (e) => {
@@ -54,6 +56,7 @@
           toast.success("Query posted successfully!");
           setFormData(initialState);
           setFile(null);
+          navigate("/");
         } else {
           toast.error(response?.payload?.message || "Failed to submit query.");
         }

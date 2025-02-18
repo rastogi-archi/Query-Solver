@@ -36,6 +36,7 @@ const Connections = () => {
                 username={user.username}
                 avatarUrl={user.avatarUrl}
                 email={user.email}
+                id = {user._id}
                 onFollow={() => handleFollow(user.username)}
               />
             ))}
