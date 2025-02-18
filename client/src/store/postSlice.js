@@ -16,7 +16,7 @@ export const createPost = createAsyncThunk(
                 {
                     withCredentials: true,
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "multipart/form-data",
                     },
                 }
             )

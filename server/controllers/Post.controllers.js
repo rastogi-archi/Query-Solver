@@ -13,6 +13,7 @@ export const createPost = async(req,res) => {
             })
         }
         if (req.file) {
+            console.log(req.file.path)
             const uploadResponse = await uploadOnCloudinary(req.file.path);
             if (!uploadResponse.success) {
                 return res.status(500).json({ success: false, message: "File upload failed" });
@@ -45,6 +46,7 @@ export const createPost = async(req,res) => {
 export const fetchAllPosts = async(req,res) => {
     try {
         const listOfPosts = await Post.find({});
+        console.log(listOfPosts)
         res.status(200).json({
             success: true,
             data: listOfPosts

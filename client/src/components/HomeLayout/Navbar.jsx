@@ -17,10 +17,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-lg p-4 flex justify-between items-center fixed top-0 w-full z-50 h-16">
+    <nav className="bg-white shadow-lg p-4 flex justify-between items-center fixed top-0 w-full z-50 h-20">
       {/* Logo */}
       <Link to="/">
-        <img src="logo.png" alt="connect" className="h-36 object-contain" />
+        <img src="logo.png" alt="connect" className="h-28 flex items-center justify-center object-contain" />
       </Link>
 
       {/* Navigation Links */}
