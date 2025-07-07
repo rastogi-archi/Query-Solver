@@ -2,17 +2,14 @@ import React from 'react';
 import { Heart, MessageSquare, X } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { deletePost } from '../../store/postSlice';
-import toast from "react-hot-toast"
+import toast from "react-hot-toast";
 
 const Card = ({ id, query, description, file, user, date }) => {
-
   const dispatch = useDispatch();
+
   const handleOnDelete = async () => {
     try {
-      // Dispatch the delete action and wait for the result
       const response = await dispatch(deletePost(id));
-
-      // Check if the delete operation was successful
       if (response?.payload?.success) {
         toast.success("Post deleted successfully");
       } else {
@@ -24,40 +21,42 @@ const Card = ({ id, query, description, file, user, date }) => {
   };
 
   return (
-    <div className="max-w-sm bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+    <div className="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full">
       {/* Image Section */}
-      <div className="relative">
+      <div className="relative h-40 sm:h-44 flex items-center justify-center">
         <img
-          className="w-full h-56 object-contain rounded-t-2xl"
-          src={file || "noimage.jpg"}
+          src={file || "no-image.png"}
           alt={query}
+          className="max-h-full max-w-full object-contain"
         />
         <button
-          className="absolute top-2 right-2 p-2 bg-gray-200 rounded-full shadow-md hover:bg-red-500 hover:text-white transition-colors duration-300"
+          className="absolute top-2 right-2 p-1.5 bg-white border rounded-full hover:bg-red-500 hover:text-white transition-colors duration-300"
           onClick={handleOnDelete}>
-          <X className="size-4" />
+          <X className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Post Content */}
-      <div className="p-6">
-        <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
-          <span className="font-semibold">{user || "Anonymous"}</span>
-          <span>{date || "N/A"}</span>
-        </div>
-        <h2 className="text-xl font-bold text-gray-800 mb-3">{query}</h2>
-        <p className="text-gray-600 mb-5 text-sm leading-relaxed">{description}</p>
+      {/* Content */}
+      <div className="p-4 flex flex-col justify-between flex-grow">
+        <div className="mb-2">
+          <div className="flex justify-between text-xs text-gray-500 mb-1">
+            <span className="font-medium truncate max-w-[60%]">{user || "Anonymous"}</span>
+            <span>{new Date(date).toLocaleDateString()}</span>
+          </div>
 
-        {/* Actions Section */}
-        <div className="flex items-center justify-between mt-4 text-gray-600">
-          <button
-            className="flex items-center gap-2 hover:text-red-500 cursor-pointer transition-colors duration-300">
-            <Heart size={20} />
-            <span>Like</span>
+          <h2 className="text-base font-semibold text-gray-800 line-clamp-2">{query}</h2>
+          <p className="text-sm text-gray-600 mt-1 line-clamp-3">{description}</p>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center justify-between text-sm text-gray-500 pt-2 mt-auto border-t">
+          <button className="flex items-center gap-1 hover:text-red-500 transition">
+            <Heart size={16} />
+            Like
           </button>
-          <button className="flex items-center gap-2 hover:text-blue-500 cursor-pointer transition-colors duration-300">
-            <MessageSquare size={20} />
-            <span>Comment</span>
+          <button className="flex items-center gap-1 hover:text-blue-500 transition">
+            <MessageSquare size={16} />
+            Comment
           </button>
         </div>
       </div>

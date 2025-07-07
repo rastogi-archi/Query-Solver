@@ -6,7 +6,7 @@ import Post from '../../components/post/Post';
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       <Navbar />
       <div className="flex">
         {/* Sidebar */}
@@ -17,10 +17,6 @@ const Home = () => {
         {/* Main Content Area */}
         <div className="flex-1 p-3">
           <Post />
-        </div>
-
-        <div className="w-64">
-          {/* <Adds/> */}
         </div>
       </div>
     </div>
