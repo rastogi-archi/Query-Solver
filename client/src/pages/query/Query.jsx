@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Navbar from '../../components/homeLayout/Navbar';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';

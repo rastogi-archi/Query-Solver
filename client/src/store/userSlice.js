@@ -16,6 +16,15 @@ export const getAllUsers = createAsyncThunk(
         return response.data;
     }
 )
+export const checkAuth = createAsyncThunk(
+    "/user/checkAuth",
+    async () => {
+        const response = await axios.get("http://localhost:5000/api/auth/checkAuth", {
+            withCredentials: true
+        });
+        return response.data.user;
+    }
+);
 
 export const deleteUser = createAsyncThunk(
     "/user/delete",
@@ -51,6 +60,9 @@ export const UserSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+        setUser: (state, action) => {
+            state.user = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -80,12 +92,24 @@ export const UserSlice = createSlice({
             })
             .addCase(getUserProfile.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.user = action.payload; 
+                state.user = action.payload;
             })
             .addCase(getUserProfile.rejected, (state, action) => {
                 state.isLoading = false;
             })
+            .addCase(checkAuth.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(checkAuth.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.user = action.payload;
+            })
+            .addCase(checkAuth.rejected, (state) => {
+                state.isLoading = false;
+                state.user = null;
+            })
     }
 })
 
+export const { setUser } = UserSlice.actions;
 export default UserSlice.reducer

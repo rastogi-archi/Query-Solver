@@ -1,12 +1,14 @@
 import jwt from "jsonwebtoken"
 
-export const authMiddleware = async(req,res,next) => {
+export const authMiddleware = async (req, res, next) => {
     const token = req.cookies.token;
-    if(!token){
-        return res.status(400).json({
+    console.log("cookies" ,req.cookies);
+    if (!token) {
+        return res.status(200).json({
             success: false,
-            message : "Unauthorised user"
-        })
+            user: null,
+            message: "Unauthorized user"
+        });
     }
     try {
         const decoded = jwt.verify(token, process.env.CLIENT_SECRET);
@@ -14,9 +16,10 @@ export const authMiddleware = async(req,res,next) => {
         next();
     } catch (error) {
         console.log(error);
-        res.status(500).json({
+        return res.status(200).json({
             success: false,
-            message : "Internal server error"
-        })
+            user: null,
+            message: "Invalid or expired token"
+        });
     }
 }

@@ -27,8 +27,6 @@ const Post = () => {
                 query={postItem.query}
                 description={postItem.description}
                 file={postItem.file}
-                user={postItem.user}
-                date={postItem.date}
                 id={postItem._id}
               />
             ) : null

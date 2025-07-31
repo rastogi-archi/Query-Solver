@@ -62,18 +62,18 @@ export const logoutUser = createAsyncThunk(
 
 export const checkAuth = createAsyncThunk(
     "/auth/checkAuth",
-    async () => {
-        const response = await axios.get(
-            "http://localhost:5000/api/auth/checkAuth",
-            {
-                withCredentials: true,
-                headers: {
-                    "Cache-Control":
-                        "no-store, no-cache, must-revalidate, proxy-revalidate",
-                },
-            }
-        )
-        return response.data;
+    async (_, thunkAPI) => {
+        try {
+            const response = await axios.get(
+                "http://localhost:5000/api/auth/checkAuth",
+                {
+                    withCredentials: true,
+                }
+            )
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue("Not Authenticated");
+        }
     }
 )
 
@@ -81,13 +81,18 @@ export const AuthSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        logout : (state) => {
+            state.user = null;
+            state.isAuthenticated = false;
+        }
     },
     extraReducers: (builder) => {
         builder
+            // Register
             .addCase(registerUser.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(registerUser.fulfilled, (state, action) => {
+            .addCase(registerUser.fulfilled, (state) => {
                 state.isLoading = false;
                 state.user = null;
                 state.isAuthenticated = false;
@@ -97,6 +102,8 @@ export const AuthSlice = createSlice({
                 state.user = null;
                 state.isAuthenticated = false;
             })
+
+            // Login
             .addCase(loginUser.pending, (state) => {
                 state.isLoading = true;
             })
@@ -104,26 +111,33 @@ export const AuthSlice = createSlice({
                 state.isLoading = false;
                 state.user = action.payload.success ? action.payload.user : null;
                 state.isAuthenticated = action.payload.success;
+
+                if (action.payload.success) {
+                    localStorage.setItem("user", JSON.stringify(action.payload.user));
+                }
             })
             .addCase(loginUser.rejected, (state) => {
                 state.isLoading = false;
                 state.user = null;
                 state.isAuthenticated = false;
             })
+
+            // Logout
+            .addCase(logoutUser.fulfilled, (state) => {
+                state.isLoading = false;
+                state.user = null;
+                state.isAuthenticated = false;
+                localStorage.removeItem("user");
+            })
             .addCase(checkAuth.pending, (state) => {
                 state.isLoading = true;
             })
             .addCase(checkAuth.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.user = action.payload.success ? action.payload.user : null;
-                state.isAuthenticated = action.payload.success;
+                state.user = action.payload;
+                state.isAuthenticated = true;
             })
-            .addCase(checkAuth.rejected, (state, action) => {
-                state.isLoading = false;
-                state.user = null;
-                state.isAuthenticated = false;
-            })
-            .addCase(logoutUser.fulfilled, (state, action) => {
+            .addCase(checkAuth.rejected, (state) => {
                 state.isLoading = false;
                 state.user = null;
                 state.isAuthenticated = false;
@@ -131,4 +145,5 @@ export const AuthSlice = createSlice({
     }
 })
 
+export const { logout } = AuthSlice.actions;
 export default AuthSlice.reducer

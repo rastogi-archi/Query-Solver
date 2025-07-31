@@ -1,11 +1,12 @@
 import React from 'react';
 import { Heart, MessageSquare, X } from 'lucide-react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deletePost } from '../../store/postSlice';
 import toast from "react-hot-toast";
 
-const Card = ({ id, query, description, file, user, date }) => {
+const Card = ({ id, query, description, file}) => {
   const dispatch = useDispatch();
+  const {user}= useSelector((state) => state.auth)
 
   const handleOnDelete = async () => {
     try {
@@ -23,11 +24,11 @@ const Card = ({ id, query, description, file, user, date }) => {
   return (
     <div className="bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full">
       {/* Image Section */}
-      <div className="relative h-40 sm:h-44 flex items-center justify-center">
+      <div className="relative h-40 sm:h-44 flex items-center justify-center ">
         <img
           src={file || "no-image.png"}
           alt={query}
-          className="max-h-full max-w-full object-contain"
+          className="max-h-full max-w-full"
         />
         <button
           className="absolute top-2 right-2 p-1.5 bg-white border rounded-full hover:bg-red-500 hover:text-white transition-colors duration-300"
@@ -40,8 +41,8 @@ const Card = ({ id, query, description, file, user, date }) => {
       <div className="p-4 flex flex-col justify-between flex-grow">
         <div className="mb-2">
           <div className="flex justify-between text-xs text-gray-500 mb-1">
-            <span className="font-medium truncate max-w-[60%]">{user || "Anonymous"}</span>
-            <span>{new Date(date).toLocaleDateString()}</span>
+            <span className="font-medium truncate max-w-[60%]">{user?.fullName || "Anonymous"}</span>
+            <span>{new Date().toLocaleDateString()}</span>
           </div>
 
           <h2 className="text-base font-semibold text-gray-800 line-clamp-2">{query}</h2>

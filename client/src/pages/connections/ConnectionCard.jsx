@@ -7,10 +7,10 @@ import toast from 'react-hot-toast';
 const ConnectionCard = ({id, name, username, avatarUrl, onFollow, email }) => {
     const dispatch = useDispatch();
 
-    const handleOnDelete = () => {
+    const handleOnDelete = async () => {
         try {
           // Dispatch the delete action and wait for the result
-          const response = dispatch(deleteUser(id));
+          const response = await dispatch(deleteUser(id));
     
           // Check if the delete operation was successful
           if (response?.payload?.success) {
@@ -19,7 +19,7 @@ const ConnectionCard = ({id, name, username, avatarUrl, onFollow, email }) => {
             toast.error("User not found");
           }
         } catch (error) {
-            console.log(error)
+          console.log(error)
           toast.error("An error occurred while deleting the user");
         }
       };
@@ -36,7 +36,7 @@ const ConnectionCard = ({id, name, username, avatarUrl, onFollow, email }) => {
 
       {/* User Avatar */}
       <img
-        src={avatarUrl || 'user.png'}
+        src={'profile_icon.png'}
         alt={`${name}`}
         className="h-16 rounded-full object-cover border-3 border-[#1c3d83] mb-4"
       />

@@ -1,21 +1,20 @@
 import React from 'react';
 import Navbar from '../../components/homeLayout/Navbar';
 import Sidebar from '../../components/homeLayout/Sidebar';
-// import Adds from '../../components/homeLayout/Adds';
 import Post from '../../components/post/Post';
 
 const Home = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="flex">
-        {/* Sidebar */}
-        <div className="w-64">
+      <div className="flex flex-col md:flex-row">
+        {/* Sidebar - hidden on small screens */}
+        <div className="w-full md:w-64 border-r border-gray-200">
           <Sidebar />
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 p-3">
+        <div className="flex-1 p-4">
           <Post />
         </div>
       </div>

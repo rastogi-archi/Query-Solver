@@ -7,55 +7,61 @@ import { editUserProfile, getUserProfile } from "../../store/userSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
-
-  // Get user data from Redux store
   const { user } = useSelector((state) => state.user || {});
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [phone, setPhone] = useState("");
   const [bio, setBio] = useState("");
-  const [profilePicture, setProfilePicture] = useState("user.png");
+  const [image, setImage] = useState("");
 
-  // Fetch user profile data from backend when the component mounts
+  // Fetch user profile on mount
   useEffect(() => {
     if (user?._id) {
-      dispatch(getUserProfile(user._id.toString())); 
+      dispatch(getUserProfile(user._id));
     }
   }, [dispatch, user?._id]);
 
-  // Set the initial state with the fetched data when the user data is available
+  // Prefill form when user data is available
   useEffect(() => {
     if (user) {
       setEmail(user.email || "");
       setUsername(user.username || "");
       setPhone(user.phone || "");
       setBio(user.bio || "");
-      setProfilePicture(user.profilePicture || "user.png");
+      setImage(user.image || "profile_icon.png");
     }
   }, [user]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfilePicture(URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result); // Base64 string
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSave = () => {
+    if (!user?._id) return;
+
     const updatedData = {
-      id : user._id.toString(),
+      id: user._id,
       email,
       username,
       phone,
       bio,
-      profilePicture,
+      image, // Send image field as expected by backend
     };
-    // Save logic here, usually sending updated data to the backend
-    toast.success("Profile updated successfully!");
+
     dispatch(editUserProfile(updatedData))
-    .then(() => toast.success("Profile updated successfully!"))
-    .catch(() => toast.error("Failed to update profile"))
+      .then(() => {
+        toast.success("Profile updated successfully!");
+        dispatch(getUserProfile(user._id)); // Refresh user after update
+      })
+      .catch(() => toast.error("Failed to update profile"));
   };
 
   return (
@@ -71,7 +77,7 @@ const Profile = () => {
       <div className="flex justify-center mb-6">
         <div className="relative group">
           <img
-            src={profilePicture || "https://via.placeholder.com/150"}
+            src={image || "https://via.placeholder.com/150"}
             alt="Profile"
             className="w-32 h-32 rounded-full object-cover shadow-md border-2 border-gray-200"
           />
@@ -97,7 +103,7 @@ const Profile = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="mt-2 p-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder={user?.username || "Enter your username"}
+              placeholder="Enter your username"
             />
           </div>
 
@@ -108,7 +114,7 @@ const Profile = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="mt-2 p-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder={user?.email || "Enter your email"}
+              placeholder="Enter your email"
             />
           </div>
 
@@ -119,7 +125,7 @@ const Profile = () => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="mt-2 p-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              placeholder={user?.phone || "Enter your phone number"}
+              placeholder="Enter your phone number"
             />
           </div>
         </div>
@@ -130,7 +136,7 @@ const Profile = () => {
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             className="mt-2 p-3 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-            placeholder={user?.bio || "Tell us a little about yourself..."}
+            placeholder="Tell us a little about yourself..."
             rows={4}
           />
         </div>
