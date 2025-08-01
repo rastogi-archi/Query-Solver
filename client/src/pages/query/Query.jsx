@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Navbar from '../../components/homeLayout/Navbar';
+import Navbar from '../../components/Navbar';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { createPost } from '../../store/postSlice';
