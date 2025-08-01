@@ -16,8 +16,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+
+const allowedOrigins = [
+  "https://query-solver-frontend.onrender.com", 
+  "http://localhost:5173",                      
+];
+
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'DELETE', 'PUT'],
     allowedHeaders: [
         "Content-Type",
