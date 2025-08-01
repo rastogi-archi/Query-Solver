@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from "axios"
+import { connectSocket } from "../utils/socket";
 
 const initialState = {
     isLoading: true,
@@ -29,22 +30,26 @@ export const registerUser = createAsyncThunk(
 )
 
 export const loginUser = createAsyncThunk(
-    "/auth/login",
-    async (FormData) => {
-        try {
-            const response = await axios.post(
-                "http://localhost:5000/api/auth/login",
-                FormData,
-                {
-                    withCredentials: true
-                }
-            )
-            return response.data;
-        } catch (error) {
-            return (error.response?.data || { message: "Something went wrong" });
-        }
+  "/auth/login",
+  async (formData, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        formData,
+        { withCredentials: true }
+      );
+
+      const user = response.data.user;
+      connectSocket(user._id);
+
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || { message: "Something went wrong" }
+      );
     }
-)
+  }
+);
 
 export const logoutUser = createAsyncThunk(
     "/auth/logout",

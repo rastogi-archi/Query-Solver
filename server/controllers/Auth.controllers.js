@@ -62,7 +62,7 @@ export const loginUser = async (req, res) => {
             username: checkUser.username
         },
             process.env.CLIENT_SECRET,
-            { expiresIn: "10m" }
+            { expiresIn: "60m" }
         )
 
         res.cookie("token", token, {
