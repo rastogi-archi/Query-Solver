@@ -35,6 +35,10 @@ app.use(cors({
     credentials: true
 }))
 
+app.get("/", (req, res) => {
+  res.send("✅ Query Solver Backend is running.");
+});
+
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", AuthRoute);
