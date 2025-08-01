@@ -1,4 +1,4 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import Home from "./pages/home/Home";
@@ -21,8 +21,8 @@ function App() {
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
-  
-  const { isAuthenticated, isLoading} = useSelector((state) => state.auth);
+
+  const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
 
   if (isLoading) {
     return (
@@ -31,6 +31,8 @@ function App() {
       </div>
     );
   }
+
+  const location = useLocation();
 
   return (
     <>
@@ -97,7 +99,9 @@ function App() {
       <Toaster position="top-center" reverseOrder={false} />
 
       {/* Footer */}
-      <Footer />
+      {location.pathname !== "/login" && location.pathname !== "/register" && (
+        <Footer />
+      )}
     </>
   );
 }
