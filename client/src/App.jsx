@@ -7,7 +7,7 @@ import Chat from "./pages/chat/Chat";
 import Query from "./pages/query/Query";
 import UnAuth from "./pages/unAuth/unAuth";
 import Profile from "./pages/Profile/Profile";
-import Footer from "./components/HomeLayout/Footer";
+import Footer from "./components/Footer";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/Protected";
 import { useSelector } from "react-redux";
