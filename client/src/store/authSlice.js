@@ -8,12 +8,14 @@ const initialState = {
     user: null
 }
 
+const API_BASE_URL = "https://query-solver-backend.onrender.com";
+
 export const registerUser = createAsyncThunk(
     "/auth/register",
     async (FormData) => {
         try {
             const response = await axios.post(
-                "http://localhost:5000/api/auth/register",
+                `${API_BASE_URL}/api/auth/register`,
                 FormData,
                 {
                     withCredentials: true,
@@ -34,7 +36,7 @@ export const loginUser = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${API_BASE_URL}/api/auth/login`,
         formData,
         { withCredentials: true }
       );
@@ -55,7 +57,7 @@ export const logoutUser = createAsyncThunk(
     "/auth/logout",
     async () => {
         const response = await axios.post(
-            "http://localhost:5000/api/auth/logout",
+            `${API_BASE_URL}/api/auth/logout`,
             {},
             {
                 withCredentials: true
@@ -70,7 +72,7 @@ export const checkAuth = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const response = await axios.get(
-                "http://localhost:5000/api/auth/checkAuth",
+                `${API_BASE_URL}/api/auth/checkAuth`,
                 {
                     withCredentials: true,
                 }

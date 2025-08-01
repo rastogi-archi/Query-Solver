@@ -1,10 +1,11 @@
-// store/messageSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+const API_BASE_URL = "https://query-solver-backend.onrender.com";
 
 export const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
   async ({ senderId, receiverId }) => {
-    const res = await fetch(`http://localhost:5000/api/messages/${senderId}/${receiverId}`, {
+    const res = await fetch(`${API_BASE_URL}/api/messages/${senderId}/${receiverId}`, {
       credentials: "include",
     });
     const data = await res.json();
@@ -16,7 +17,7 @@ export const saveMessage = createAsyncThunk(
   "messages/saveMessage",
   async (messageData, { rejectWithValue }) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/messages`, {
+      const res = await fetch(`${API_BASE_URL}/api/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

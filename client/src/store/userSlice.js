@@ -7,11 +7,13 @@ const initialState = {
     userList: []
 }
 
+const API_BASE_URL = "https://query-solver-backend.onrender.com";
+
 export const getAllUsers = createAsyncThunk(
     "/user/getAllUsers",
     async () => {
         const response = await axios.get(
-            "http://localhost:5000/api/user/getAllUsers"
+            `${API_BASE_URL}/api/user/getAllUsers`
         )
         return response.data;
     }
@@ -19,7 +21,7 @@ export const getAllUsers = createAsyncThunk(
 export const checkAuth = createAsyncThunk(
     "/user/checkAuth",
     async () => {
-        const response = await axios.get("http://localhost:5000/api/auth/checkAuth", {
+        const response = await axios.get(`${API_BASE_URL}/api/auth/checkAuth`, {
             withCredentials: true
         });
         return response.data.user;
@@ -30,7 +32,7 @@ export const deleteUser = createAsyncThunk(
     "/user/delete",
     async (id) => {
         const response = await axios.delete(
-            `http://localhost:5000/api/user/delete/${id}`
+            `${API_BASE_URL}/api/user/delete/${id}`
         )
         return id;
     }
@@ -40,7 +42,7 @@ export const getUserProfile = createAsyncThunk(
     "/user/profile",
     async (id) => {
         const response = await axios.get(
-            `http://localhost:5000/api/user/profile/${id}`
+            `${API_BASE_URL}/api/user/profile/${id}`
         )
         return id;
     }
@@ -50,7 +52,7 @@ export const editUserProfile = createAsyncThunk(
     "/user/editProfile",
     async (id) => {
         const response = await axios.put(
-            `http://localhost:5000/api/user/editProfile/${id}`
+            `${API_BASE_URL}/api/user/editProfile/${id}`
         )
         return id;
     }

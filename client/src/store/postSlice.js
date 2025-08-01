@@ -6,12 +6,14 @@ const initialState = {
     postList: []
 }
 
+const API_BASE_URL = "https://query-solver-backend.onrender.com";
+
 export const createPost = createAsyncThunk(
     '/post/createPost',
     async (FormData, { rejectWithValue }) => {
         try {
             const response = await axios.post(
-                "http://localhost:5000/api/post/createPost",
+                `${API_BASE_URL}/api/post/createPost`,
                 FormData,
                 {
                     withCredentials: true,
@@ -32,7 +34,7 @@ export const fetchAllPost = createAsyncThunk(
     async () => {
         try {
             const response = await axios.get(
-                "http://localhost:5000/api/post/get"
+                `${API_BASE_URL}/api/post/get`
             )
             return response.data;
         } catch (error) {
@@ -44,7 +46,7 @@ export const fetchAllPost = createAsyncThunk(
 export const deletePost = createAsyncThunk(
     '/post/delete',
     async (id) => {
-        const response = await axios.delete(`http://localhost:5000/api/post/delete/${id}`)
+        const response = await axios.delete(`${API_BASE_URL}/api/post/delete/${id}`)
         return id;
     }
 )
