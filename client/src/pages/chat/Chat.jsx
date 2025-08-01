@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { connectSocket, getSocket } from "../../utils/socket";
 import { fetchMessages, addMessageRealTime, saveMessage } from "../../store/messageSlice";
 import { getAllUsers } from "../../store/userSlice";
-import Navbar from "../../components/homeLayout/Navbar";
+import Navbar from "../../components/common/HomeLayout/Navbar";
 import NoUserSelected from "./NoUserSelected";
 
 const Chat = () => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { LogOut, Menu, X, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../../store/authSlice';
+import { logoutUser } from '../../../store/authSlice';
 import toast from 'react-hot-toast';
 
 const Navbar = () => {

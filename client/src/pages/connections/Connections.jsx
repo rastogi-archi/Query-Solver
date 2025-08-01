@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Navbar from '../../components/homeLayout/Navbar';
+import Navbar from '../../components/common/HomeLayout/Navbar';
 import ConnectionCard from './ConnectionCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers, checkAuth } from '../../store/userSlice';
